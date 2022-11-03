@@ -12,6 +12,7 @@
 * 流量控制框架选型Sentinel，分布式事务选型Seata。
 
 #### 友情链接 [若依官网](http://ruoyi.vip/)
+#### 友情链接 [若依/RuoYi-Cloud](https://gitee.com/zhangmrit/ruoyi-cloud) Ant Design版本。
 
 ## 系统模块
 
