@@ -4,14 +4,15 @@
 
 ## 项目简介
 
-本系统使用若依平台进行开发，仅用于学习。
+本系统使用若依平台进行开发，仅作学习使用。
 
 * 采用前后端分离的模式，微服务版本前端(基于 [RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue))。
 * 后端采用Spring Boot、Spring Cloud & Alibaba。
 * 注册中心、配置中心选型Nacos，权限认证使用Redis。
 * 流量控制框架选型Sentinel，分布式事务选型Seata。
 
-####友情链接===》 [若依官网](http://ruoyi.vip/)
+##友情链接===> [若依官网](http://ruoyi.vip/)
+
 ## 系统模块
 
 ~~~
@@ -44,7 +45,25 @@ com.ruoyi
 
 <table>
     <tr>
-        <td><img src="ruoyi-ui/src/assets/images/1.jpg"/></td>
-        <td><img src="ruoyi-ui/src/assets/images/2.jpg"/></td>
+        <td><img src="演示图/1.png"/></td>
+        <td><img src="演示图/2.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="演示图/3.png"/></td>
+        <td><img src="演示图/4.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="演示图/5.png"/></td>
+        <td><img src="演示图/6.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="演示图/7.png"/></td>
     </tr>
 </table>
+
+## 使用说明
+
+配置教程中初始化数据库这一步，直接运行本项目中“sql-my”文件下三个sql文件即可
+#### [配置教程](http://t.zoukankan.com/wang0327-p-15187469.html)
+
+
