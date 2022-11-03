@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.ticket.mapper.TicketOrderRecordMapper">
+    
+    <resultMap type="TicketOrderRecord" id="TicketOrderRecordResult">
+        <result property="id"    column="id"    />
+        <result property="orderType"    column="order_type"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="routes"    column="routes"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="buyTime"    column="buy_time"    />
+        <result property="buyNum"    column="buy_num"    />
+        <result property="seatLevel"    column="seat_level"    />
+        <result property="allPrice"    column="all_price"    />
+        <result property="userId"    column="user_id"    />
+        <result property="del"    column="del"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <association property="sysUser" javaType="com.ruoyi.system.api.domain.SysUser">
+            <id property="userId" column="user_id"></id>
+            <result property="nickName" column="nick_name"></result>
+        </association>
+    </resultMap>
+
+    <sql id="selectTicketOrderRecordVo">
+        select t.id, t.order_type, t.code, t.name, t.routes, t.start_time, t.buy_time, t.buy_num, t.seat_level, t.all_price,
+               t.user_id, t.del, t.create_by, t.create_time, t.update_by, t.update_time, t.remark ,u.user_id, u.nick_name
+        from ticket_order_record t
+            left join  sys_user u on t.user_id=u.user_id
+    </sql>
+
+    <select id="selectTicketOrderRecordList" parameterType="TicketOrderRecord" resultMap="TicketOrderRecordResult">
+        <include refid="selectTicketOrderRecordVo"/>
+        <where>
+            del = 0
+            <if test="orderType != null  and orderType != ''"> and t.order_type = #{orderType}</if>
+            <if test="code != null  and code != ''"> and t.code = #{code}</if>
+            <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
+            <if test="routes != null  and routes != ''"> and t.routes like concat('%', #{routes}, '%')</if>
+            <if test="startTime != null "> and DATE_FORMAT(t.start_time, "%Y-%m-%d") = DATE_FORMAT(#{startTime,jdbcType=VARCHAR}, "%Y-%m-%d")</if>
+            <if test="buyTime != null "> and DATE_FORMAT(t.buy_time, "%Y-%m-%d") = DATE_FORMAT(#{buyTime,jdbcType=VARCHAR}, "%Y-%m-%d")</if>
+            <if test="buyNum != null "> and t.buy_num = #{buyNum}</if>
+            <if test="seatLevel != null  and seatLevel != ''"> and t.seat_level = #{seatLevel}</if>
+            <if test="allPrice != null "> and t.all_price = #{allPrice}</if>
+            <if test="userId != null "> and t.user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTicketOrderRecordById" parameterType="Long" resultMap="TicketOrderRecordResult">
+        <include refid="selectTicketOrderRecordVo"/>
+        where t.id = #{id} and t.del = 0
+    </select>
+        
+    <insert id="insertTicketOrderRecord" parameterType="TicketOrderRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into ticket_order_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderType != null">order_type,</if>
+            <if test="code != null">code,</if>
+            <if test="name != null">name,</if>
+            <if test="routes != null">routes,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="buyTime != null">buy_time,</if>
+            <if test="buyNum != null">buy_num,</if>
+            <if test="seatLevel != null">seat_level,</if>
+            <if test="allPrice != null">all_price,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="del != null">del,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderType != null">#{orderType},</if>
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="routes != null">#{routes},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="buyTime != null">#{buyTime},</if>
+            <if test="buyNum != null">#{buyNum},</if>
+            <if test="seatLevel != null">#{seatLevel},</if>
+            <if test="allPrice != null">#{allPrice},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="del != null">#{del},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTicketOrderRecord" parameterType="TicketOrderRecord">
+        update ticket_order_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="routes != null">routes = #{routes},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="buyTime != null">buy_time = #{buyTime},</if>
+            <if test="buyNum != null">buy_num = #{buyNum},</if>
+            <if test="seatLevel != null">seat_level = #{seatLevel},</if>
+            <if test="allPrice != null">all_price = #{allPrice},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="del != null">del = #{del},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTicketOrderRecordById" parameterType="Long">
+        update ticket_order_record set del=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteTicketOrderRecordByIds" parameterType="String">
+        update ticket_order_record set del=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

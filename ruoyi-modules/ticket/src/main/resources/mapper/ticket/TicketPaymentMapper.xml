@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.ticket.mapper.TicketPaymentMapper">
+    
+    <resultMap type="TicketPayment" id="TicketPaymentResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="startPlace"    column="start_place"    />
+        <result property="endPlace"    column="end_place"    />
+        <result property="planType"    column="plan_type"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="commonPrice"    column="common_price"    />
+        <result property="higherPrice"    column="higher_price"    />
+        <result property="commonNum"    column="common_num"    />
+        <result property="higherNum"    column="higher_num"    />
+        <result property="commonSurplus"    column="common_surplus"    />
+        <result property="higherSurplus"    column="higher_surplus"    />
+        <result property="del"    column="del"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTicketPaymentVo">
+        select id, code, name, type, start_place, end_place, plan_type, start_time, end_time, common_price, higher_price, common_num, higher_num, common_surplus, higher_surplus, del, create_by, create_time, update_by, update_time, remark from ticket_payment
+    </sql>
+
+    <select id="selectTicketPaymentList" parameterType="TicketPayment" resultMap="TicketPaymentResult">
+        <include refid="selectTicketPaymentVo"/>
+        <where>
+            del = 0
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="startPlace != null  and startPlace != ''"> and start_place = #{startPlace}</if>
+            <if test="endPlace != null  and endPlace != ''"> and end_place = #{endPlace}</if>
+            <if test="planType != null  and planType != ''"> and plan_type = #{planType}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="commonPrice != null "> and common_price = #{commonPrice}</if>
+            <if test="higherPrice != null "> and higher_price = #{higherPrice}</if>
+            <if test="commonNum != null "> and common_num = #{commonNum}</if>
+            <if test="higherNum != null "> and higher_num = #{higherNum}</if>
+            <if test="commonSurplus != null "> and common_surplus = #{commonSurplus}</if>
+            <if test="higherSurplus != null "> and higher_surplus = #{higherSurplus}</if>
+        </where>
+    </select>
+    
+    <select id="selectTicketPaymentById" parameterType="Long" resultMap="TicketPaymentResult">
+        <include refid="selectTicketPaymentVo"/>
+        where id = #{id} and del = 0
+    </select>
+        
+    <insert id="insertTicketPayment" parameterType="TicketPayment" useGeneratedKeys="true" keyProperty="id">
+        insert into ticket_payment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null and code != ''">code,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="startPlace != null and startPlace != ''">start_place,</if>
+            <if test="endPlace != null and endPlace != ''">end_place,</if>
+            <if test="planType != null and planType != ''">plan_type,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="commonPrice != null">common_price,</if>
+            <if test="higherPrice != null">higher_price,</if>
+            <if test="commonNum != null">common_num,</if>
+            <if test="higherNum != null">higher_num,</if>
+            <if test="commonSurplus != null">common_surplus,</if>
+            <if test="higherSurplus != null">higher_surplus,</if>
+            <if test="del != null">del,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="startPlace != null and startPlace != ''">#{startPlace},</if>
+            <if test="endPlace != null and endPlace != ''">#{endPlace},</if>
+            <if test="planType != null and planType != ''">#{planType},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="commonPrice != null">#{commonPrice},</if>
+            <if test="higherPrice != null">#{higherPrice},</if>
+            <if test="commonNum != null">#{commonNum},</if>
+            <if test="higherNum != null">#{higherNum},</if>
+            <if test="commonSurplus != null">#{commonSurplus},</if>
+            <if test="higherSurplus != null">#{higherSurplus},</if>
+            <if test="del != null">#{del},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTicketPayment" parameterType="TicketPayment">
+        update ticket_payment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="startPlace != null and startPlace != ''">start_place = #{startPlace},</if>
+            <if test="endPlace != null and endPlace != ''">end_place = #{endPlace},</if>
+            <if test="planType != null and planType != ''">plan_type = #{planType},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="commonPrice != null">common_price = #{commonPrice},</if>
+            <if test="higherPrice != null">higher_price = #{higherPrice},</if>
+            <if test="commonNum != null">common_num = #{commonNum},</if>
+            <if test="higherNum != null">higher_num = #{higherNum},</if>
+            <if test="commonSurplus != null">common_surplus = #{commonSurplus},</if>
+            <if test="higherSurplus != null">higher_surplus = #{higherSurplus},</if>
+            <if test="del != null">del = #{del},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTicketPaymentById" parameterType="Long">
+        update ticket_payment set del = 1 where id = #{id}
+    </delete>
+
+    <delete id="deleteTicketPaymentByIds" parameterType="String">
+        update ticket_payment set del = 1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

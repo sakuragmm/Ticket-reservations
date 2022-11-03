@@ -1,0 +1,4 @@
+Spring Boot Version: ${spring-boot.version}
+Spring Application Name: ${spring.application.name}
+
+♂♂♂♂♂   蕉♂航空服务平台启动中....  ♂♂♂♂
