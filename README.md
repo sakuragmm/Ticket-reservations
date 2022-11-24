@@ -64,7 +64,7 @@ com.ruoyi
 
 1、本项目中 redis 未设置密码，nacos 使用默认密码。
 
-2、配置教程中初始化数据库这一步，直接运行本项目中“sql-my”文件下三个sql文件即可
+2、配置教程中初始化数据库这一步，分别创建三个数据库(ry-cloud、ry-config、ry-seata)，然后分别运行本项目中“sql-my”文件下三个sql文件即可
 #### [配置教程](http://t.zoukankan.com/wang0327-p-15187469.html)
 
 ## 学习交流
