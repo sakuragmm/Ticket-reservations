@@ -3,6 +3,8 @@ package com.ruoyi.ticket.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,7 @@ public class TicketFlightInfoController extends BaseController
     /**
      * 查询航班信息列表
      */
+    @ApiOperation(value = "查询航班信息列表")
     @RequiresPermissions("ticket:flightm:list")
     @GetMapping("/list")
     public TableDataInfo list(TicketFlightInfo ticketFlightInfo)
