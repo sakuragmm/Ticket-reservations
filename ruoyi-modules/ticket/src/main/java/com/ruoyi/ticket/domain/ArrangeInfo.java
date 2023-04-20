@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * 安排航班信息对象
+ * @author gmm
  */
 public class ArrangeInfo {
     /** 单个id */

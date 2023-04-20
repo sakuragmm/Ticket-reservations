@@ -27,8 +27,7 @@ import javax.annotation.Resource;
  * @date 2022-09-21
  */
 @Service
-public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService 
-{
+public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService {
     @Resource
     private TicketOrderInfoMapper ticketOrderInfoMapper;
 
@@ -37,6 +36,21 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
 
     @Resource
     private TicketOrderRecordMapper ticketOrderRecordMapper;
+
+    /**
+     * 管理员组id
+     */
+    private static final Long ADMIN_DEPT_ID = 103L;
+
+    /**
+     * 经济舱标识
+     */
+    private static final String ECONOMY_CLASS = "0";
+
+    /**
+     * 头等舱标识
+     */
+    private static final String FIRST_CLASS = "1";
 
     /**
      * 查询订单信息
@@ -59,13 +73,13 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
     @Override
     public List<TicketOrderInfo> selectTicketOrderInfoList(TicketOrderInfo ticketOrderInfo)
     {
-        //获取当前登录用户信息
+        // 获取当前登录用户信息
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        //判断对象是否为空
+        // 判断对象是否为空
         if(StringUtils.isNotNull(loginUser)){
             SysUser user = loginUser.getSysUser();
-            //如果不是超级管理员，或者不属于管理员组（组id--103）则将当前用户id赋值给userId，如果是管理员则将当前userId置空
-            if (StringUtils.isNotNull(user) && !user.isAdmin() && user.getDeptId() != 103){
+            // 如果不是超级管理员，或者不属于管理员组（组id--103）则将当前用户id赋值给userId，如果是管理员则将当前userId置空
+            if (StringUtils.isNotNull(user) && !user.isAdmin() && !ADMIN_DEPT_ID.equals(user.getDeptId())){
                 ticketOrderInfo.setUserId(user.getUserId());
             }else{
                 ticketOrderInfo.setUserId(null);
@@ -81,37 +95,37 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
      * @param type 订单记录类型(0订票，1改签，2退票)
      * @return 结果
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertTicketOrderInfo(TicketFlightInfo flightInfo, String type)
     {
-        //订单信息类
+        // 订单信息类
         TicketOrderInfo orderInfo = new TicketOrderInfo();
-        //订单编号
+        // 订单编号
         orderInfo.setCode("蕉♂航-" + DateUtils.dateTimeNow() + "-" + flightInfo.getSeatLevel());
-        //航班名称
+        // 航班名称
         orderInfo.setName(flightInfo.getName());
-        //航线
+        // 航线
         orderInfo.setRoutes(flightInfo.getStartPlace()+"-"+flightInfo.getEndPlace());
-        //起飞时间
+        // 起飞时间
         orderInfo.setStartTime(flightInfo.getStartTime());
-        //订购日期
+        // 订购日期
         orderInfo.setBuyTime(DateUtils.getNowDate());
-        //订购数量
+        // 订购数量
         orderInfo.setBuyNum(flightInfo.getBuyNum());
-        //舱位等级
+        // 舱位等级
         orderInfo.setSeatLevel(flightInfo.getSeatLevel());
-        //航班id
+        // 航班id
         orderInfo.setFlightId(flightInfo.getId());
 
         /**
          * 设置票价，同时修改航班信息表中对应票数量
          */
-        //如果是经济舱
-        if ("0".equals(flightInfo.getSeatLevel())){
-            //设置票价
+        // 如果是经济舱
+        if (ECONOMY_CLASS.equals(flightInfo.getSeatLevel())){
+            // 设置票价
             orderInfo.setPrice(flightInfo.getCommonPrice());
-            //修改票数
+            // 修改票数
             TicketFlightInfo flight = new TicketFlightInfo();
             flight.setId(flightInfo.getId());
             flight.setCommonSurplus(flightInfo.getCommonSurplus()-orderInfo.getBuyNum());
@@ -120,11 +134,11 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
                 return -1;
             }
         }
-        //如果是头等舱
-        else if ("1".equals(flightInfo.getSeatLevel())){
-            //设置票价
+        // 如果是头等舱
+        else if (FIRST_CLASS.equals(flightInfo.getSeatLevel())){
+            // 设置票价
             orderInfo.setPrice(flightInfo.getHigherPrice());
-            //修改票数
+            // 修改票数
             TicketFlightInfo flight = new TicketFlightInfo();
             flight.setId(flightInfo.getId());
             flight.setHigherSurplus(flightInfo.getHigherSurplus()-orderInfo.getBuyNum());
@@ -133,11 +147,11 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
                 return -1;
             }
         }
-        //总价
+        // 总价
         orderInfo.setAllPrice(orderInfo.getPrice().multiply(new BigDecimal(orderInfo.getBuyNum())));
-        //客户id
+        // 客户id
         orderInfo.setUserId(SecurityUtils.getLoginUser().getSysUser().getUserId());
-        //生成订票记录
+        // 生成订票记录
         addOrderRecord(orderInfo,type);
         return ticketOrderInfoMapper.insertTicketOrderInfo(orderInfo);
     }
@@ -149,17 +163,28 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
      */
     public int addOrderRecord(TicketOrderInfo orderInfo,String type){
         TicketOrderRecord record = new TicketOrderRecord();
-        record.setOrderType(type); //记录类型--根据传入的类型进行设置
-        record.setCode(orderInfo.getCode()); //订单号
-        record.setName(orderInfo.getName()); //航班名称
-        record.setRoutes(orderInfo.getRoutes()); //航线
-        record.setStartTime(orderInfo.getStartTime()); //起飞时间
-        record.setBuyTime(orderInfo.getBuyTime()); //订购日期
-        record.setBuyNum(orderInfo.getBuyNum()); //订购数量
-        record.setSeatLevel(orderInfo.getSeatLevel()); //舱位等级
-        record.setAllPrice(orderInfo.getAllPrice()); //总价
-        record.setUserId(orderInfo.getUserId()); //客户id
-        record.setCreateTime(DateUtils.getNowDate()); //创建日期
+        //记录类型--根据传入的类型进行设置
+        record.setOrderType(type);
+        //订单号
+        record.setCode(orderInfo.getCode());
+        //航班名称
+        record.setName(orderInfo.getName());
+        //航线
+        record.setRoutes(orderInfo.getRoutes());
+        //起飞时间
+        record.setStartTime(orderInfo.getStartTime());
+        //订购日期
+        record.setBuyTime(orderInfo.getBuyTime());
+        //订购数量
+        record.setBuyNum(orderInfo.getBuyNum());
+        //舱位等级
+        record.setSeatLevel(orderInfo.getSeatLevel());
+        //总价
+        record.setAllPrice(orderInfo.getAllPrice());
+        //客户id
+        record.setUserId(orderInfo.getUserId());
+        //创建日期
+        record.setCreateTime(DateUtils.getNowDate());
 
         return ticketOrderRecordMapper.insertTicketOrderRecord(record);
     }
@@ -183,7 +208,7 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
      * @param ids 需要删除的订单信息主键
      * @return 结果
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteTicketOrderInfoByIds(Long[] ids,String type)
     {
@@ -193,8 +218,10 @@ public class TicketOrderInfoServiceImpl implements ITicketOrderInfoService
             //取出订单信息
             TicketOrderInfo orderInfo = ticketOrderInfoMapper.selectTicketOrderInfoById(id);
 
-            Long num = orderInfo.getBuyNum(); //购票数量
-            Long flightId = orderInfo.getFlightId(); //航班主键
+            //购票数量
+            Long num = orderInfo.getBuyNum();
+            //航班主键
+            Long flightId = orderInfo.getFlightId();
 
             //查询航班信息
             TicketFlightInfo f1 = ticketFlightInfoMapper.selectTicketFlightInfoById(flightId);

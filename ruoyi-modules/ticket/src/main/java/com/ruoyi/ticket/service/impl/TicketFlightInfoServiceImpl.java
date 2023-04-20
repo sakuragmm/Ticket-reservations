@@ -80,7 +80,7 @@ public class TicketFlightInfoServiceImpl implements ITicketFlightInfoService
      * @param arrangeInfo 航班信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int arrangeTicketFlightInfo(ArrangeInfo arrangeInfo) {
         int num = 0;
@@ -109,24 +109,39 @@ public class TicketFlightInfoServiceImpl implements ITicketFlightInfoService
      *
      * */
     public int setInfo(TicketPayment ticketPayment,ArrangeInfo arrangeInfo){
-        //创建航班信息对象
+        // 创建航班信息对象
         TicketFlightInfo flightInfo = new TicketFlightInfo();
-        flightInfo.setCode(ticketPayment.getCode()); //编码
-        flightInfo.setName(ticketPayment.getName()); //航班名称
-        flightInfo.setType(ticketPayment.getType()); //类型
-        flightInfo.setStartPlace(ticketPayment.getStartPlace()); //出发地
-        flightInfo.setEndPlace(ticketPayment.getEndPlace()); //目的地
-        flightInfo.setPlanType(ticketPayment.getPlanType()); //飞机类型
-        flightInfo.setStartTime(arrangeInfo.getStartTime()); //起飞时间
-        flightInfo.setEndTime(arrangeInfo.getEndTime()); //降落时间
-        flightInfo.setCommonPrice(ticketPayment.getCommonPrice()); //经济舱票价
-        flightInfo.setHigherPrice(ticketPayment.getHigherPrice()); //头等舱票价
-        flightInfo.setCommonNum(ticketPayment.getCommonNum()); //经济舱票数
-        flightInfo.setHigherNum(ticketPayment.getHigherNum()); //头等舱票数
-        flightInfo.setCommonSurplus(ticketPayment.getCommonNum()); //经济舱余票
-        flightInfo.setHigherSurplus(ticketPayment.getHigherNum()); //头等舱余票
-        flightInfo.setRemark(ticketPayment.getRemark()); //备注
-        //插入航班信息表
+        // 编码
+        flightInfo.setCode(ticketPayment.getCode());
+        // 航班名称
+        flightInfo.setName(ticketPayment.getName());
+        // 类型
+        flightInfo.setType(ticketPayment.getType());
+        // 出发地
+        flightInfo.setStartPlace(ticketPayment.getStartPlace());
+        // 目的地
+        flightInfo.setEndPlace(ticketPayment.getEndPlace());
+        // 飞机类型
+        flightInfo.setPlanType(ticketPayment.getPlanType());
+        // 起飞时间
+        flightInfo.setStartTime(arrangeInfo.getStartTime());
+        // 降落时间
+        flightInfo.setEndTime(arrangeInfo.getEndTime());
+        // 经济舱票价
+        flightInfo.setCommonPrice(ticketPayment.getCommonPrice());
+        // 头等舱票价
+        flightInfo.setHigherPrice(ticketPayment.getHigherPrice());
+        // 经济舱票数
+        flightInfo.setCommonNum(ticketPayment.getCommonNum());
+        // 头等舱票数
+        flightInfo.setHigherNum(ticketPayment.getHigherNum());
+        // 经济舱余票
+        flightInfo.setCommonSurplus(ticketPayment.getCommonNum());
+        // 头等舱余票
+        flightInfo.setHigherSurplus(ticketPayment.getHigherNum());
+        // 备注
+        flightInfo.setRemark(ticketPayment.getRemark());
+        // 插入航班信息表
         return insertTicketFlightInfo(flightInfo);
 }
 
@@ -140,7 +155,7 @@ public class TicketFlightInfoServiceImpl implements ITicketFlightInfoService
     public int updateTicketFlightInfo(TicketFlightInfo ticketFlightInfo)
     {
 
-        //设置修改人和修改时间
+        // 设置修改人和修改时间
         ticketFlightInfo.setUpdateBy(SecurityUtils.getUsername());
         ticketFlightInfo.setUpdateTime(DateUtils.getNowDate());
 

@@ -6,9 +6,6 @@ import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.domain.SysUser;
 import com.ruoyi.system.api.model.LoginUser;
-import com.ruoyi.ticket.domain.TicketOrderInfo;
-import com.ruoyi.ticket.mapper.TicketOrderInfoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.ticket.mapper.TicketOrderRecordMapper;
 import com.ruoyi.ticket.domain.TicketOrderRecord;
@@ -28,8 +25,10 @@ public class TicketOrderRecordServiceImpl implements ITicketOrderRecordService
     @Resource
     private TicketOrderRecordMapper ticketOrderRecordMapper;
 
-    @Resource
-    private TicketOrderInfoMapper ticketOrderInfoMapper;
+    /**
+     * 管理员组id
+     */
+    private static final Long ADMIN_DEPT_ID = 103L;
 
     /**
      * 查询订单记录
@@ -58,7 +57,7 @@ public class TicketOrderRecordServiceImpl implements ITicketOrderRecordService
         if(StringUtils.isNotNull(loginUser)){
             SysUser user = loginUser.getSysUser();
             //如果不是超级管理员，或者不属于管理员组（组id--103）则将当前用户id赋值给userId，如果是管理员则将当前userId置空
-            if (StringUtils.isNotNull(user) && !user.isAdmin() && user.getDeptId() != 103){
+            if (StringUtils.isNotNull(user) && !user.isAdmin() && !ADMIN_DEPT_ID.equals(user.getDeptId())){
                 ticketOrderRecord.setUserId(user.getUserId());
             }else{
                 ticketOrderRecord.setUserId(null);
