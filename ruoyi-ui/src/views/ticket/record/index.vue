@@ -112,7 +112,7 @@
           <dict-tag :options="dict.type.order_record_type" :value="scope.row.orderType"/>
         </template>
       </el-table-column>
-      <el-table-column label="订单客户" align="center" prop="sysUser.nickName" />
+      <el-table-column label="订单客户" align="center" prop="nickName" />
       <el-table-column label="订单号" align="center" prop="code" />
       <el-table-column label="航班名称" align="center" prop="name" />
       <el-table-column label="航线" align="center" prop="routes" />

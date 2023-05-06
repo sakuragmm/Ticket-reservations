@@ -164,7 +164,7 @@
       <el-table-column label="订单号" align="center" prop="code" />
       <el-table-column label="航班名称" align="center" prop="name" />
       <el-table-column label="航线" align="center" prop="routes" />
-      <el-table-column label="乘客" align="center" prop="sysUser.nickName" />
+      <el-table-column label="乘客" align="center" prop="nickName" />
       <el-table-column label="起飞时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>

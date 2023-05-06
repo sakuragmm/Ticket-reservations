@@ -24,10 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
-        <association property="sysUser" javaType="com.ruoyi.system.api.domain.SysUser">
-            <id property="userId" column="user_id"></id>
-            <result property="nickName" column="nick_name"></result>
-        </association>
+        <result property="nickName"    column="nick_name"    />
     </resultMap>
 
     <sql id="selectTicketOrderInfoVo">

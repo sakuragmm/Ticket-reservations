@@ -60,11 +60,19 @@ public class TicketOrderInfo extends BaseEntity
     /** 客户id */
     private Long userId;
 
+    /** 用户名 */
+    private String nickName;
+
     /** 删除状态(默认0删除1) */
     private String del;
 
-    /** 用户对象 */
-    private SysUser sysUser;
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public String getPaymentStatus() {
         return paymentStatus;
@@ -72,14 +80,6 @@ public class TicketOrderInfo extends BaseEntity
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-
-    public SysUser getSysUser() {
-        return sysUser;
-    }
-
-    public void setSysUser(SysUser sysUser) {
-        this.sysUser = sysUser;
     }
 
     public Long getFlightId() {
@@ -220,7 +220,9 @@ public class TicketOrderInfo extends BaseEntity
             .append("remark", getRemark())
             .append("seatLevel", getSeatLevel())
             .append("flightId", getFlightId())
+/*
             .append("sysUser", getSysUser())
+*/
             .toString();
     }
 }

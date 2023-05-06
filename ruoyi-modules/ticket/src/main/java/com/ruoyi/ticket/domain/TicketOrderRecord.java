@@ -58,10 +58,18 @@ public class TicketOrderRecord extends BaseEntity
     /** 删除状态 */
     private String del;
 
-    /** 用户对象 */
-    private SysUser sysUser;
+    /** 用户名称 */
+    private String nickName;
 
-    public void setId(Long id) 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -170,14 +178,6 @@ public class TicketOrderRecord extends BaseEntity
         return del;
     }
 
-    public SysUser getSysUser() {
-        return sysUser;
-    }
-
-    public void setSysUser(SysUser sysUser) {
-        this.sysUser = sysUser;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -198,7 +198,6 @@ public class TicketOrderRecord extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
-            .append("sysUser", getSysUser())
             .toString();
     }
 }
